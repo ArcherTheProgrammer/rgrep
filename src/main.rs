@@ -12,6 +12,9 @@ struct Args {
 
     #[clap(default_value = "none")]
     search: String,
+
+    #[clap(short = 'i', long = "ignore-case")]
+    ignore: bool,
 }
 
 fn main() {
@@ -26,8 +29,16 @@ fn main() {
                     Ok(value) => {
                         let single = value.split_whitespace();
                         for word in single {
-                            if args.search == word {
-                                println!("{}", &value);
+                            if args.ignore {
+                                let upper_search = args.search.to_uppercase();
+                                let upper_value = word.to_uppercase();
+                                if upper_search == upper_value {
+                                    println!("{}", value);
+                                }
+                            } else {
+                                if args.search == word {
+                                    println!("{}", &value);
+                                }
                             }
                         }
                     }
